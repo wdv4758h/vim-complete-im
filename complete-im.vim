@@ -11,6 +11,7 @@ import vim
 from os.path import expanduser
 import cPickle as pickle
 #import pickle
+import sqlite3
 
 line = vim.eval("getline('.')")
 line_end = len(line)
@@ -28,13 +29,21 @@ while end < line_end and (line[end].isalpha() or line[end].isdigit()):
 home = expanduser("~")
 eat = False
 
-if line.startswith(";"):
-    table = pickle.load(open("{}/.vim/im-table/boshiamy_table.p".format(home), "rb"))
-    eat = True
-else:
-    table = pickle.load(open("{}/.vim/im-table/chewing_table.p".format(home), "rb"))
+table = "chewing"
 
-value = table.get(line[start:end])
+if line.startswith(";"):
+    table = "boshiamy"
+    eat = True
+
+# query
+
+value = []
+con = sqlite3.connect("{}/.vim/im-table.sqlite".format(home))
+cur = con.cursor()
+data = cur.execute("SELECT value FROM {} WHERE key=?".format(table), (line[start:end],)).fetchall()
+for i in data:
+    value.append(i[0])
+cur.close()
 
 if value:
     value = map(lambda x: x.encode('utf-8'), value) # for unicode in Python 2
