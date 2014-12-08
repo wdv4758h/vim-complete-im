@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 # boshiamy_table
 # {{{
 boshiamy_table = {}
@@ -23285,6 +23290,25 @@ chewing_table["zp6"] = ["頒", "墳", "焚", "汾", "賁", "妢", "弅", "枌", 
 chewing_table["zul4"] = ["覅"]
 # }}}
 
-import pickle
-pickle.dump(boshiamy_table, open("boshiamy_table.p", "wb"), protocol=2) # use protocol 2 for Python 2
-pickle.dump(chewing_table, open("chewing_table.p", "wb"), protocol=2)
+#import pickle
+#pickle.dump(boshiamy_table, open("boshiamy_table.p", "wb"), protocol=2) # use protocol 2 for Python 2
+#pickle.dump(chewing_table, open("chewing_table.p", "wb"), protocol=2)
+
+import sqlite3
+
+con = sqlite3.connect("im-table.sqlite")
+
+for im in (("chewing", chewing_table), ("boshiamy", boshiamy_table)):
+
+    con.execute("create table {}(key text, value text)".format(im[0]))
+
+    table = []
+
+    for key, i in im[1].items():
+        for value in i:
+            table.append((key, value))
+
+    con.executemany("INSERT INTO {}(key, value) VALUES (?, ?)".format(im[0]), table)
+    con.commit()
+
+con.close()
