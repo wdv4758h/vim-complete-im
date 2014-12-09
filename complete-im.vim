@@ -41,8 +41,8 @@ value = []
 con = sqlite3.connect("{}/.vim/im-table.sqlite".format(home))
 cur = con.cursor()
 data = cur.execute("SELECT value FROM {} WHERE key=?".format(table), (line[start:end],)).fetchall()
-for i in data:
-    value.append(i[0])
+if data:
+    value = zip(*data)[0] # transpose
 cur.close()
 
 if value:
