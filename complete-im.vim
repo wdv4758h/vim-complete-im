@@ -31,9 +31,34 @@ eat = False
 
 table = "chewing"
 
-if line.startswith(";"):
-    table = "boshiamy"
-    eat = True
+word = line[start:end]
+
+vim.command("return '{}|'".format(line[start-1:end]))
+
+if start > 0:
+
+    if line[start-1] == ";":
+
+        table = "boshiamy"
+        eat = True
+
+    elif line[start-1:start+1] == "\u":
+
+        try:
+
+            number = int(line[start+1:end], base=16)
+
+            # '6a19' (27161) => '標'
+            # '123'  => 'ģ'
+
+            value = [unichr(number).encode('utf-8')]
+
+            vim.command("call complete({}, {})".format(start, value).decode('string_escape'))
+            vim.command("return ''")
+
+        except:
+
+            pass
 
 # query
 
