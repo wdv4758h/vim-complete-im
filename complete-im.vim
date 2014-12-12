@@ -33,8 +33,6 @@ table = "chewing"
 
 word = line[start:end]
 
-vim.command("return '{}|'".format(line[start-1:end]))
-
 if start > 0:
 
     if line[start-1] == ";":
