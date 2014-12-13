@@ -40,6 +40,11 @@ if start > 0:
         table = "boshiamy"
         eat = True
 
+    elif line[start-1] == ".":
+
+        table = "kana"
+        eat = True
+
     elif line[start-1:start+1] == "\u":
 
         try:
@@ -83,3 +88,6 @@ EOF
 endfunction
 
 inoremap <space> <C-R>=DictComplete()<CR>
+
+" For acting upon end of completion, see the CompleteDone autocommand event.
+"
