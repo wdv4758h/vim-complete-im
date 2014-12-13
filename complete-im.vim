@@ -3,6 +3,9 @@ if !has('python')
     finish
 endif
 
+let g:im_start_kana = "."
+let g:im_start_boshiamy = ";"
+
 function! DictComplete()
 
 python << EOF
@@ -33,14 +36,19 @@ table = "chewing"
 
 word = line[start:end]
 
+leading = {
+    "boshiamy": vim.eval("g:im_start_boshiamy"),
+    "kana": vim.eval("g:im_start_kana"),
+}
+
 if start > 0:
 
-    if line[start-1] == ";":
+    if line[start-1] == leading["boshiamy"]:
 
         table = "boshiamy"
         eat = True
 
-    elif line[start-1] == ".":
+    elif line[start-1] == leading["kana"]:
 
         table = "kana"
         eat = True
