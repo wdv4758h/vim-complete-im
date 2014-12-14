@@ -75,7 +75,7 @@ if start > 0:
 
 value = []
 
-con = sqlite3.connect("{}/.vim/vim-complete-im/im-table.sqlite".format(home))
+con = sqlite3.connect("{}/.vim/bundle/vim-complete-im/im-table.sqlite".format(home))
 cur = con.cursor()
 data = cur.execute("SELECT value FROM {} WHERE key=?".format(table), (line[start:end],)).fetchall()
 if data:
